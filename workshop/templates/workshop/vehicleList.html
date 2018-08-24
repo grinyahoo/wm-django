@@ -1,0 +1,10 @@
+{% extends 'workshop/base.html' %}
+{% block content %}
+      {% if vehicles %}
+      {% for vehicle in vehicles %}
+        <p><a href="{% url 'workshop:vehicleDetail' vehicle.id %}">{{ vehicle }}</a></p>
+      {% endfor %}
+      {% else %}
+      <p>No vehicles</p>
+      {% endif %}
+{% endblock %}

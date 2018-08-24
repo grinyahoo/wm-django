@@ -1,0 +1,10 @@
+{% extends 'workshop/base.html' %}
+{% block content %}
+      {% if customers %}
+      {% for customer in customers %}
+        <p><a href="{% url 'workshop:customerDetail' customer.id %}">{{ customer }}</a></p>
+      {% endfor %}
+      {% else %}
+      <p>No customers</p>
+      {% endif %}
+{% endblock %}

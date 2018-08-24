@@ -1,0 +1,10 @@
+{% extends 'workshop/base.html' %}
+{% block content %}
+      {% if invoices %}
+      {% for invoice in invoices %}
+        <p><a href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice }}</a></p>
+      {% endfor %}
+      {% else %}
+      <p>No invoices</p>
+      {% endif %}
+{% endblock %}

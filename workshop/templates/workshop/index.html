@@ -1,5 +1,19 @@
-{% if tasks %}
-{% for task in tasks %}
-{{ task }}
-{% endfor %}
-{% endif %}
+{% extends 'workshop/base.html' %}
+{% block content %}
+    {% if user.is_authenticated %}
+    <h1>Logged in as {{ user.username }}</h1>
+    {% else %}
+    <h1>You are not logged in</h1>
+    {% endif %}
+    <h2> Tasks: </h2>
+    {% if tasks %}
+    {% for task in tasks %}
+    <p>
+      {{ task }}
+    </p>
+
+    {% endfor %}
+    {% else %}
+    <p>No tasks yet</p>
+    {% endif %}
+{% endblock %}
