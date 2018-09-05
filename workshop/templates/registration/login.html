@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>GarageManager - Login</title>
-  </head>
-  <body>
-      <h1>Login</h1>
-      {% if message %}
-      <p>{{ message }}</p>
-      {% endif %}
-      <div class="login">
-        <form class="login" action="{% url 'login' %}" method="post">
+{% extends 'workshop/guest.html' %}
+{% block content %}
+  <!-- <main id="guestContentBox" class="m-auto col-sm-4 col-md-6 col-lg-4 px-4 pt-3" role="main"> -->
+      <div id="loginBox" class="m-auto p-5">
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <form class="form-signin" action="{% url 'login' %}" method="post">
           {% csrf_token %}
+          <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <p>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input id="inputUsername" name="username" class="form-control" placeholder="Username" required="" autofocus="" type="text">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input id="inputPassword" name="password" class="form-control" placeholder="Password" required="" type="password">
+            <input type="hidden" name="next" value="{{ next }}">
+          </p>
+          <p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          </p>
+          <p class="text-muted">Don't have an account? <a href="{% url 'workshop:register' %}">Register</a></p>
+          <p class="mt-5 mb-3 text-muted">© 2018</p>
 
-          <p>Username: {{ form.username }}</p>
-          <p>Password: {{ form.password }}</p>
-
-          <input type="submit" name="" value="Log in">
-          <input type="hidden" name="next" value="{{ next }}">
-        </form>
-      </div>
-  </body>
-</html>
+      </form>
+    </div>
+  <!-- </main> -->
+{% endblock %}

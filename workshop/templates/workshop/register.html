@@ -1,0 +1,40 @@
+{% extends 'workshop/guest.html' %}
+{% block content %}
+<div class="m-auto p-5 col-sm-10 col-md-6 col-lg-4">
+  <h1 class="p-2">Sign Up</h1>
+  <form class="post form-signin p-4" name="registerForm" action="{% url 'workshop:register' %}" method="post">
+      {% csrf_token %}
+      {% if form.errors and display_errors %}
+      <p><small class="text-strong">
+        {{ form.username.errors }}
+        {{ form.password1.errors }}
+        {{ form.password2.errors.as_text }}
+      </small></p>
+      {% endif %}
+      <p>
+        <label class="sr-only" for="id_username">Username:</label>
+        <input class="w-100" name="username" value="{{ username }}" placeholder="Username" maxlength="150" autofocus="" required="" id="id_username" type="text">
+      </p>
+      <p>
+        <label class="sr-only" for="id_password1">Password:</label>
+        <input class="w-100" placeholder="Password" name="password1" required="" id="id_password1" type="password">
+        <br>
+        <label class="sr-only" for="id_password2">Password confirmation:</label>
+        <input class="w-100" placeholder="Repeat password" name="password2" required="" id="id_password2" type="password">
+      </p>
+      <p>
+      <input class="btn btn-primary btn-large btn-block" type="submit" name="submit" value="Register">
+      </p>
+  </form>
+  <div class="text-muted text-left">
+    <ul>
+      <li>Username 150 characters or fewer. Letters, digits and @/./+/-/_ only.</li>
+      <li>Your password can't be too similar to your other personal information.</li>
+      <li>Your password must contain at least 8 characters.</li>
+      <li>Your password can't be a commonly used password.</li>
+      <li>Your password can't be entirely numeric.</li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

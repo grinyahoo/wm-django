@@ -1,4 +1,25 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-  <p>{{ task }}</p>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title "><span>Task #{{ task.id }}: </span><span class="badge badge-primary">{{ task.vehicle }}</span><span> created on </span><span class="badge badge-secondary">{{ task.date_filed }}</span><span> addressed to </span><span class="badge badge-info">{{ task.employee }}</span></h5>
+    </div>
+    <div class="card-body">
+      <h6>Labor:</h6>
+      <p>{{ task.description }}</p>
+      <h6>Amount:</h6>
+      <p>{{ task.amount }}</p>
+      <h6>Invoiced:
+        {% if task.invoiced %}
+        <span class="badge badge-success">Yes</span>
+        {% else %}
+        <span class="badge badge-dark">No</span>
+        {% endif %}
+      </h6>
+
+    </div>
+    <div class="card-footer">
+      <h6 class="text-muted">Paid in full on {{ task.date_paid }}</h6>
+    </div>
+  </div>
 {% endblock %}
