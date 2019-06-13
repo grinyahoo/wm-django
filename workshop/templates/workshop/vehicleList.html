@@ -1,9 +1,24 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
       {% if vehicles %}
-      {% for vehicle in vehicles %}
-        <p><a href="{% url 'workshop:vehicleDetail' vehicle.id %}">{{ vehicle }}</a></p>
-      {% endfor %}
+      <div class="row">
+        {% for vehicle in vehicles %}
+        <div class="col-md-6 col-lg-3 p-1 m-0">
+          <div class="card ">
+            <div class="card-header text-strong">
+              <a class="text-dark" href="{% url 'workshop:vehicleDetail' vehicle.id %}">{{ vehicle }}</a>
+            </div>
+            <div class="card-body">
+              <p>Customer: {{ vehicle.customer }}</p>
+              <p>Plate numer: {{ vehicle.plate_number }}</p>
+              <p>Color: {{ vehicle.color }}</p>
+              <p>VIN: {{ vehicle.vim }}</p>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
       {% else %}
       <p>No vehicles</p>
       {% endif %}

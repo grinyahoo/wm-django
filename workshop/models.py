@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
-# Create your models here .
+# helper functions
+
+def now_plus_days(days):
+    return datetime.datetime.now() + datetime.timedelta(days=days)
 
 class Employee(models.Model):
     name = models.CharField(max_length=200)
@@ -59,23 +63,25 @@ class Task(models.Model):
     amount = models.FloatField()
     employee = models.ForeignKey(Employee, on_delete=models.PROTECT)
     date_filed = models.DateTimeField('date filed')
-    date_paid = models.DateTimeField('date paid')
+    date_paid = models.DateTimeField('date paid', default=now_plus_days(360))
     invoiced = models.BooleanField(default=0)
+    # invoice = models.ForeignKey(Invoice, default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=2)
 
     def __str__(self):
-        return "%s %s %s" % (self.customer, self.vehicle, self.description)
+        # return "%s %s %s" % (self.customer, self.vehicle, self.description)
+        return "%s %s" % (self.vehicle, self.description)
 
 class Invoice(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    date = models.DateTimeField('date created')
-    date_due = models.DateTimeField('due date')
-    amount_total = models.FloatField()
-    amount_paid = models.FloatField()
+    date = models.DateTimeField('date created', default=datetime.datetime.now())
+    date_due = models.DateTimeField('due date', default=now_plus_days(30))
+    amount_total = models.FloatField(default=0)
+    amount_paid = models.FloatField(default=0)
     tasks = models.ManyToManyField(Task)
-    date_paid = models.DateTimeField('date paid')
-    paid_in_full = models.BooleanField(default='FALSE')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=2)
+    date_paid = models.DateTimeField('date paid', default=now_plus_days(360))
+    paid_in_full = models.BooleanField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s %s" % (self.customer, self.total)
+        return "%s %s" % (self.customer, self.amount_total)

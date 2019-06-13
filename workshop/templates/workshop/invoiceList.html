@@ -1,10 +1,23 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-      {% if invoices %}
+<div class="container">
+  {% if tasks_uninvoiced_count %}
+  <div class="alert alert-warning">
+    You have <a class="text-muted p-1 border border-dark rounded" href="{% url 'workshop:taskList' %}">{{ tasks_uninvoiced_count }}</a> uninvoiced tasks.
+  </div>
+  {% endif %}
+  <div class="row">
+    {% if invoices %}
+    <ul>
       {% for invoice in invoices %}
-        <p><a href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice }}</a></p>
+        <li><a href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice }}</a></li>
       {% endfor %}
-      {% else %}
-      <p>No invoices</p>
-      {% endif %}
+    </ul>
+
+    {% else %}
+    <p>No invoices.</p>
+    {% endif %}
+  </div>
+</div>
+
 {% endblock %}

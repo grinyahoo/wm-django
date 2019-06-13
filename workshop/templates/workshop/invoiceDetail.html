@@ -1,4 +1,15 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-  <p>{{ invoice }}</p>
+  <p>Invoice #{{ invoice.id }} to {{ invoice.customer }}</p>
+  <p>Date: {{ invoice.date }}</p>
+  <p>Due date: {{ invoice.date_due }}</p>
+  <p>Amount: {{ invoice.amount_total }}</p>
+  <p>Services performed:
+    <ul>
+
+      <li>{{ invoice.tasks }}</li>
+
+    </ul>
+  </p>
+  <p>Paid</p>
 {% endblock %}

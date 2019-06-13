@@ -1,0 +1,11 @@
+{% if vehicles %}
+{% for vehicle in vehicles %}
+<div class="card m-1">
+  <div class="card-body">
+    <a href="{% url 'workshop:vehicleDetail' vehicle.id %}">{{ vehicle.plate_number }}: {{ vehicle }} {{ vehicle.color }}</a>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No vehicles.</p>
+{% endif %}

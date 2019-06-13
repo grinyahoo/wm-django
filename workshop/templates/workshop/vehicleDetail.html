@@ -1,4 +1,35 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-  <p>{{ vehicle }}</p>
+  <div class="container">
+      <div class="row">
+          <h2 class=" border-bottom border-dark">{{ vehicle }}</h2>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Vehicle info</h4>
+          <p>Customer: {{ vehicle.customer }}</p>
+          <p>Plate numer: {{ vehicle.plate_number }}</p>
+          <p>Color: {{ vehicle.color }}</p>
+          <p>VIN: {{ vehicle.vim }}</p>
+        </div>
+        <div class="col">
+          <h4>Works done:</h4>
+          {% if tasks %}
+          {% for task in tasks %}
+          <div class="card mt-1">
+            <div class="card-header text-muted p-1">
+              <a class="text-muted" href="{% url 'workshop:taskDetail' task.id %}">{{ task.date_filed }}</a>
+            </div>
+            <div class="card-body p-1">
+              {{ task.description }}
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>No works reported yet.</p>
+          {% endif %}
+        </div>
+
+      </div>
+  </div>
 {% endblock %}

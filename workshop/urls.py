@@ -27,6 +27,7 @@ urlpatterns = [
     #
     path('invoices/', views.invoiceList, name='invoiceList'),
     path('invoices/<int:invoice_id>', views.invoiceDetail, name='invoiceDetail'),
+    path('ajax/addInvoice', views.ajaxAddInvoice, name='ajaxAddInvoice'),
     #
     path('test/', views.test, name = 'test'),
 

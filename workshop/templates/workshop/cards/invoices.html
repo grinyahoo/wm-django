@@ -1,0 +1,16 @@
+{% if invoices %}
+{% for invoice in invoices %}
+<div class="card mt-1">
+  <div class="card-header text-muted p-1">
+    #{{ invoice.id }}: <a class="text-muted" href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice.date }}</a>
+  </div>
+  <div class="card-body p-1">
+    <p>Due date: {{ invoice.date_due }}</p>
+    <p>Amount: {{ invoice.amount_total }}</p>
+    <p>Paid: {{ invoice.date_paid }}</p>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No invoices.</p>
+{% endif %}

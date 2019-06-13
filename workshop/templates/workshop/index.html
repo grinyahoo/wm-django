@@ -1,39 +1,99 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
     {% if user.is_authenticated %}
-    <h2> Tasks: </h2>
-    <div class="container">
-      <div class="row">
-        {% if tasks %}
-        <table class="table table-striped table-bordered table-sm">
-          <thead class="thead-dark">
-            <th>#</th>
-            <th>Date filed</th>
-            <th>Customer</th>
-            <th>Vehicle</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Employee</th>
-          </thead>
-          <tbody>
-            {% for task in tasks %}
-              <tr>
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.id }}</a></td>
-                <td><a href="#">{{ task.date_filed }}</a></td>
-                <td><a href="{% url 'workshop:customerDetail' task.customer.id %}">{{ task.customer }}</a></td>
-                <td><a href="{% url 'workshop:vehicleDetail' task.vehicle.id %}">{{ task.vehicle }}</a></td>
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.description }}</a></td>
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.amount }}</a></td>
-                <td><a href="{% url 'workshop:employeeDetail' task.employee.id %}">{{ task.employee }}</a></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-          <p>You have no tasks.</p>
-        {% endif %}
-      </div>
-    </div>
+        <div class="container">
+          <div class="row mb-3">
+          <div class="col mx-1 p-0" style="height:auto">
+            <div class="lead text-center border-bottom ">Customers</div>
+            <div class="p-1 align-middle">
+              {% if customers %}
+              <div class="p-2">
+                {% for customer in customers %}
+                <p class="d-flex justify-content-between align-middle m-0">
+                  <a class="text-muted" href="{% url 'workshop:customerDetail' customer.id %}">{{ customer.name }}</a>
+                  <small><a class="add-invoice" data="{{ customer.id }}" href="">+ Invoice</a></small>
+                </p>
+                <ul class="list-group list-group-flush m-0">
+                  {% if customer.tasks_uninvoiced %}
+                  <li class="list-group-item align-middle p-1">Tasks not invoiced <span class="badge badge-primary">{{ customer.tasks_uninvoiced }}</span></li>
+                  {% endif %}
+                  {% if customer.invoices_unpaid %}
+                  <li class="list-group-item align-middle p-1">Invoices unpaid <span class="badge badge-primary">{{ customer.invoices_unpaid }}</span></li>
+                  {% endif %}
+                </ul>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col mx-1 p-0" style="height:auto">
+            <div class="lead text-center border-bottom">Totals</div>
+            <div class="px-3 py-2">
+              {% for k,v in totals.items %}
+              <p class="lead m-0">{{ k.capitalize }} <span class="badge badge-primary float-right">{{ v }}</span></p>
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="container">
+            <h3>Recent tasks:</h3>
+            <div class="">
+              {% if tasks %}
+              <ul class="list-group task-list">
+                {% for task in tasks %}
+                <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
+                  <div class="row mb-2">
+                    <div class="col text-left">
+                      <h5>{{ task.vehicle }}</h5>
+                    </div>
+                    <div class="col text-center">
+                        {{ task.customer }}
+                    </div>
+                    <div class="col text-center">
+                        {{ task.employee }}
+                    </div>
+                    <div class="col text-right">
+                      <i class="fas fa-clock"></i> {{ task.date_filed|date:"d M Y" }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-10">
+                        <p class="lead">{{ task.description }}</p>
+                    </div>
+                    <div class="col-2 text-right">
+                        <b>Total: ${{ task.amount }}</b>
+                    </div>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p>You have no tasks.</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="container mb-3">
+            <div class="lead font-weight-bold">
+              Recent invoices:
+            </div>
+            <div class="">
+              {% if invoices %}
+              <ul class="list-group list-group-flush">
+                {% for invoice in invoices %}
+                <li class="list-group-item">{{ invoice.date }}: Invoice #{{ invoice.id }} to {{ invoice.customer }}</li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <p>You have no tasks.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        </div>
+
     {% else %}
     <h1>You are not logged in</h1>
     {% endif %}

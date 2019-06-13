@@ -1,5 +1,0 @@
-# Ignore that:
-db.sqlite3
-__pycache__/
-workshop/__pycache__/
-workshop/migrations/

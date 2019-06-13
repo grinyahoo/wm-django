@@ -1,0 +1,11 @@
+{% if vehicles %}
+<ul class="list-group list-group-flush">
+  {% for vehicle in vehicles %}
+  <li class="list-group-item bg-light">
+    <a class="text-dark text-uppercase" href="{% url 'workshop:vehicleDetail' vehicle.id %}">{{ vehicle }}, {{ vehicle.color }}, plates:{{ vehicle.plate_number }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No vehicles.</p>
+{% endif %}

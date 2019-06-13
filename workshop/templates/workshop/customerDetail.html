@@ -1,4 +1,29 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-  <p>{{ customer }}</p>
+<div class="container">
+  <h2>{{ customer }}</h2>
+  <div class="row">
+    <div class="col">
+      <p class="lead"><h4>Customer info:</h4></p>
+      <p>Address: {{ customer.address }}, {{ customer.city }}, {{ customer.state }}, {{ customer.zip }}</p>
+      <p>Phone: {{ customer.phone }}</p>
+    </div>
+    <div class="col">
+      <p class="lead"><h4>Vehiles:</h4></p>
+      {% include 'workshop/lists/vehicles.html' %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <p class="lead"><h4>Services:</h4></p>
+      {% include 'workshop/lists/tasks.html' %}
+    </div>
+
+    <div class="col">
+      <p class="lead"><h4>Invoices:</h4></p>
+      {% include 'workshop/lists/invoices.html' %}
+    </div>
+  </div>
+</div>
+
 {% endblock %}

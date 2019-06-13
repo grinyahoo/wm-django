@@ -1,0 +1,14 @@
+{% if tasks %}
+{% for task in tasks %}
+<div class="card mt-1">
+  <div class="card-header text-muted p-1">
+    <a class="text-muted" href="{% url 'workshop:taskDetail' task.id %}">{{ task.date_filed }}</a>
+  </div>
+  <div class="card-body p-1">
+    {{ task.description }}
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<p>No services reported yet.</p>
+{% endif %}

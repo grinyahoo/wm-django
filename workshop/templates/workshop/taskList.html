@@ -1,12 +1,20 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
     {% if user.is_authenticated %}
-    <h2> Tasks: </h2>
+
     <div class="container">
+      <div class="d-block d-md-none">
+        <a class="nav-link add-task" href="#"><i class="fas fa-plus fa-sm"></i> Add new task</a>
+      </div>
       <div class="row">
         {% if tasks %}
-        <table class="table table-striped table-bordered table-sm">
-          <thead class="thead-dark">
+        <h2> Tasks: </h2>
+        <div class="container">
+          {% include 'workshop/lists/tasks.html' %}
+        </div>
+
+        <table class="table table-striped table-bordered table-sm shadow">
+          <thead class="thead-light">
             <th>#</th>
             <th>Date filed</th>
             <th>Customer</th>
@@ -17,7 +25,7 @@
           </thead>
           <tbody>
             {% for task in tasks %}
-              <tr>
+              <tr class="invoiced-{{ task.invoiced }}">
                 <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.id }}</a></td>
                 <td><a href="#">{{ task.date_filed }}</a></td>
                 <td><a href="{% url 'workshop:customerDetail' task.customer.id %}">{{ task.customer }}</a></td>

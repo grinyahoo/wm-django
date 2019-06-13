@@ -8,9 +8,9 @@ body {
   height: 100%;
 }
 
-.container-fluid, .row {
+/* .container-fluid, .row {
   height: 100%;
-}
+} */
 
 #top_navbar {}
 
@@ -45,4 +45,19 @@ body {
 
 #guestContentB {
   /* background-color: var(--teal); */
+}
+.task-list, .invoice-list{
+  border-radius: 0;
+}
+.task-list-item, .invoice-list-item {
+  border: 0;
+  border-radius: 0;
+}
+
+.task-list-item {
+  border-left: 5px solid var(--primary);
+}
+
+.invoice-list-item {
+  border-left: 5px solid var(--indigo);
 }

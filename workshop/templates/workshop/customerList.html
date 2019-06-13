@@ -1,10 +1,16 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
       {% if customers %}
-      {% for customer in customers %}
-        <p><a href="{% url 'workshop:customerDetail' customer.id %}">{{ customer }}</a></p>
-      {% endfor %}
+      <h3>Your customers: <small><a href="">+ Add</a></small></h3>
+      <ul class="list-group list-group-flush">
+        {% for customer in customers %}
+        <li class="list-group-item">
+          <a href="{% url 'workshop:customerDetail' customer.id %}">{{ customer }}</a>
+        </li>
+        {% endfor %}
+      </ul>
       {% else %}
-      <p>No customers</p>
+      <p class="lead">You didn't add customers yet.</p>
+      <p><a class="nav-link add-customer" href="#"><i class="fas fa-plus fa-sm"></i><span class="ml-2">Customer</span></a></p>
       {% endif %}
 {% endblock %}

@@ -1,0 +1,37 @@
+{% if invoices %}
+<ul class="list-group invoice-list">
+  {% for invoice in invoices %}
+  <li class="list-group-item invoice-list-item bg-light mb-2 py-1">
+    <div class="row">
+      <div class="col-1 text-left">
+        #{{ invoice.id }}:
+      </div>
+      <div class="col-11 text-right">
+        <a class="text-muted" href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice.date }}</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p>Due date: {{ invoice.date_due }}</p>
+        <p>Paid: {{ invoice.date_paid }}</p>
+      </div>
+      <div class="col text-right">
+        <p>Amount: {{ invoice.amount_total }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p class="" data-toggle="collapse" data-target="#collapseTasks{{ invoice.id }}" aria-expanded="false" aria-controls="collapseTasks{{ invoice.id }}"><i class="fas fa-angle-down mr-2"></i>Tasks</p>
+        <p class="collapse" id="collapseTasks{{ invoice.id }}">
+          {{ invoice.tasks }}
+        </p>
+      </div>
+
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+
+{% else %}
+<p>No invoices.</p>
+{% endif %}

@@ -1,9 +1,10 @@
 
-var ajaxModalGetForm = function(path, title, m=modal) {
+var ajaxModalGetForm = function(path, title, m=modal, query) {
 
   $.ajax({
     method: "GET",
     url: document.location.origin + path,
+    data: query,
     cache: false,
     dataType: 'html',
   })
@@ -92,6 +93,12 @@ $(document).ready(function() {
 
   $('.add-task').on('click', (e)=>{
     ajaxModalGetForm('/ajax/addTask', 'Add new Task', modal);
+    e.preventDefault();
+  });
+
+  $('.add-invoice').on('click', (e)=>{
+    let query = {'customer': e.target.getAttribute('data')}
+    ajaxModalGetForm('/ajax/addInvoice', 'Add new Invoice', modal, query);
     e.preventDefault();
   });
 
