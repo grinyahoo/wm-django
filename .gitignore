@@ -57,6 +57,7 @@ local_settings.py
 db.sqlite3
 GarageManager/
 workshop/__pycache__/
+GarageManager/__pycache__/
 
 # Flask stuff:
 instance/
@@ -104,3 +105,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
