@@ -1,4 +1,4 @@
-# Foobar
+# WM workshop manager
 
 Workshop manager (WM) is an open source software for repair businesses.
 
