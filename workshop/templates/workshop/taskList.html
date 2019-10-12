@@ -12,31 +12,6 @@
         <div class="container">
           {% include 'workshop/lists/tasks.html' %}
         </div>
-
-        <table class="table table-striped table-bordered table-sm shadow">
-          <thead class="thead-light">
-            <th>#</th>
-            <th>Date filed</th>
-            <th>Customer</th>
-            <th>Vehicle</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Employee</th>
-          </thead>
-          <tbody>
-            {% for task in tasks %}
-              <tr class="invoiced-{{ task.invoiced }}">
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.id }}</a></td>
-                <td><a href="#">{{ task.date_filed }}</a></td>
-                <td><a href="{% url 'workshop:customerDetail' task.customer.id %}">{{ task.customer }}</a></td>
-                <td><a href="{% url 'workshop:vehicleDetail' task.vehicle.id %}">{{ task.vehicle }}</a></td>
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.description }}</a></td>
-                <td><a href="{% url 'workshop:taskDetail' task.id %}">{{ task.amount }}</a></td>
-                <td><a href="{% url 'workshop:employeeDetail' task.employee.id %}">{{ task.employee }}</a></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
         {% else %}
           <p>You have no tasks.</p>
         {% endif %}
