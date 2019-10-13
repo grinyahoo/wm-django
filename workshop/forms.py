@@ -46,7 +46,7 @@ class AddVehicleForm(forms.ModelForm):
 
     class Meta:
         model = Vehicle
-        fields = ['customer', 'year', 'make', 'model', 'plate_number', 'color', 'vim']
+        exclude = ['user']
         widgets = {
             'year': forms.Select(choices=YEARS),
         }
