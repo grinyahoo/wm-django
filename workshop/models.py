@@ -9,6 +9,9 @@ def now_plus_days(days):
 
 class Employee(models.Model):
     name = models.CharField(max_length=200)
+    cost_per_hour = models.FloatField(default=0)
+    phone = models.CharField(max_length=15, null=True)
+    notes = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=2)
 
     def __str__(self):
