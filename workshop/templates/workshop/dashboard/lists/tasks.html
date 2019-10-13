@@ -1,0 +1,29 @@
+{% if tasks %}
+<ul class="list-group task-list">
+  {% for task in tasks %}
+  <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
+    <div class="row d-flex">
+      <div class="col text-left">
+        <p>{{ task.vehicle }}</p>
+      </div>
+      <div class="col text-right">
+        <i class="fas fa-clock"></i> {{ task.date_filed|date:"d M Y" }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-9">
+        {{ task.description }}
+      </div>
+      <div class="col-3 text-right">
+          <b>${{ task.amount|floatformat:2 }}</b>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="col text-center bg-light text-secondary p-5">
+  <h2>No tasks</h2>
+  <p><a href="/"><i class="far fa-plus-square fa-lg mx-2"></i>add task</a></p>
+</div>
+{% endif %}

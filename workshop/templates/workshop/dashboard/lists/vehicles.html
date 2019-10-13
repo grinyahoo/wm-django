@@ -1,0 +1,23 @@
+{% if vehicles %}
+  <h6 class="">Vehicles:</h6>
+  <table class="table table-hover">
+    <tbody>
+        {% for vehicle in vehicles %}
+        <tr>
+          <td>{{ vehicle.plate_number }}</td>
+          <td>{{ vehicle.make }}</td>
+          <td>{{ vehicle.model }}</td>
+          <td><a href="{% url "workshop:customerDetail" vehicle.customer.id %}">{{ vehicle.customer }}</a></td>
+          <td class="text-right">
+            <a href="{% url 'workshop:vehicleDetail' vehicle.id %}"><i class="far fa-edit"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+<div class="col text-center bg-light text-secondary p-3">
+  <h2>No vehicles</h2>
+  <p><a href="/"><i class="far fa-plus-square fa-lg mx-2"></i>add vehicle</a></p>
+</div>
+{% endif %}
