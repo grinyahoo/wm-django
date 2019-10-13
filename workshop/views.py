@@ -181,6 +181,15 @@ def customerDetail(request, customer_id):
     tasks = Task.objects.filter(customer=customer)
     vehicles = Vehicle.objects.filter(customer=customer)
     invoices = Invoice.objects.filter(customer=customer)
+
+    form = CustomerForm(instance=customer)
+    if request.POST:
+        form = CustomerForm(request.POST or None, instance=customer)
+        if form.is_valid():
+            customer = form.save(commit=False)
+            customer.user = request.user
+            customer.save()
+
     context = {
         'title': 'Customer %s details' % customer.name,
         'customer': customer,
@@ -188,6 +197,7 @@ def customerDetail(request, customer_id):
         'tasks': tasks,
         'invoices': invoices,
         'view_name': 'customers',
+        'form': form
     }
     return render(request, 'workshop/customerDetail.html', context)
 
@@ -211,8 +221,7 @@ def ajaxAddCustomer(request):
 
 @login_required
 def vehicleList(request):
-    # Implement vehicles by customer .annotate
-    # vehicles_by_customer = Customer.objects.filter(user=request.user).annotate(vehicles='vehicle')
+    
     vehicles = Vehicle.objects.filter(user=request.user).order_by('-id')[:50]
     context = {
         'title': 'Vehicles on service',
