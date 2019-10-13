@@ -12,7 +12,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import auth
 from .models import Employee, Make, Model, Customer, Vehicle, Task, Invoice
-from .forms import AddCustomerForm, AddTaskForm, AddEmployeeForm, AddVehicleForm, AddInvoiceForm
+from .forms import CustomerForm, TaskForm, EmployeeForm, VehicleForm, InvoiceForm
 
 # Test view:
 def test(request):
@@ -142,7 +142,7 @@ def taskDetail(request, task_id):
 # @login_required
 def ajaxAddTask(request):
     if request.method == "POST":
-        form = AddTaskForm(request.POST)
+        form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
             task.user = request.user
@@ -152,11 +152,11 @@ def ajaxAddTask(request):
             return JsonResponse({'message':'Accepted'})
     else:
         if request.user.is_authenticated:
-            form = AddTaskForm().loadVehicles(request.user)
+            form = TaskForm().loadVehicles(request.user)
             context = {
                 'path': reverse('workshop:ajaxAddTask'),
                 'method': 'post',
-                'form': AddTaskForm().as_p(),
+                'form': TaskForm().as_p(),
             }
             return render(request, 'workshop/modal/addForm.html', context)
         else:
@@ -169,7 +169,7 @@ def customerList(request):
     context = {
         'title': 'My customers',
         'customers': customers,
-        'form': AddCustomerForm().as_p(),
+        'form': CustomerForm().as_p(),
         'view_name': 'customers',
     }
     return render(request, 'workshop/customerList.html', context)
@@ -195,7 +195,7 @@ def customerDetail(request, customer_id):
 def ajaxAddCustomer(request):
     if request.POST:
         if request.method == "POST":
-            form = AddCustomerForm(request.POST)
+            form = CustomerForm(request.POST)
             if form.is_valid():
                 customer = form.save(commit=False)
                 customer.user = request.user
@@ -205,7 +205,7 @@ def ajaxAddCustomer(request):
         context = {
             'path': reverse('workshop:ajaxAddCustomer'),
             'method': 'post',
-            'form': AddCustomerForm().as_p(),
+            'form': CustomerForm().as_p(),
         }
         return render(request, 'workshop/modal/addForm.html', context)
 
@@ -226,11 +226,21 @@ def vehicleDetail(request, vehicle_id):
 
     vehicle = get_object_or_404(Vehicle, pk=vehicle_id, user=request.user)
     tasks = Task.objects.filter(vehicle=vehicle).order_by('-date_filed')
+
+    form = VehicleForm(instance=vehicle)
+    if request.POST:
+        form = VehicleForm(request.POST or None, instance=vehicle)
+        if form.is_valid():
+            vehicle = form.save(commit=False)
+            vehicle.user = request.user
+            vehicle.save()
+
     context = {
         'title': 'Vehicle %s' % vehicle,
         'vehicle': vehicle,
         'tasks': tasks,
         'view_name': 'vehicles',
+        'form': form,
     }
     return render(request, 'workshop/vehicleDetail.html', context)
 
@@ -238,7 +248,7 @@ def vehicleDetail(request, vehicle_id):
 def ajaxAddVehicle(request):
     if request.POST:
         if request.method == "POST":
-            form = AddVehicleForm(request.POST)
+            form = VehicleForm(request.POST)
             if form.is_valid():
                 vehicle = form.save(commit=False)
                 vehicle.user = request.user
@@ -248,7 +258,7 @@ def ajaxAddVehicle(request):
         context = {
             'path': reverse('workshop:ajaxAddVehicle'),
             'method': 'post',
-            'form': AddVehicleForm().as_p(),
+            'form': VehicleForm().as_p(),
         }
         return render(request, 'workshop/modal/addForm.html', context)
 
@@ -263,25 +273,23 @@ def employeeList(request):
     }
     return render(request, 'workshop/employeeList.html', context)
 
+# TODO use messages framework  
 @login_required
 def employeeDetail(request, employee_id):
 
     messages = {}
 
+    employee = get_object_or_404(Employee, pk=employee_id, user=request.user)
+    form = EmployeeForm(instance=employee)
     if request.POST:
-        if request.method == "POST":
-            form = AddEmployeeForm(request.POST)
-            if form.is_valid():
-                employee = form.save(commit=False)
-                employee.user = request.user
-                employee.save()
-                messages['success'] = "Employee data saved successfuly."
-            else:
-                messages['warning'] = "Form is not vaild. Employee data was not saved."
-    else:
-        employee = get_object_or_404(Employee, pk=employee_id, user=request.user)
-        form = AddEmployeeForm(instance=employee)
-
+        form = EmployeeForm(request.POST or None, instance=employee)
+        if form.is_valid():
+            employee = form.save(commit=False)
+            employee.user = request.user
+            employee.save()
+            messages['success'] = "Employee data saved successfuly."
+        else:
+            messages['warning'] = "Form is not vaild. Employee data was not saved."      
     context = {
         'title': 'Employee %s' % employee.name,
         'employee': employee,
@@ -295,7 +303,7 @@ def employeeDetail(request, employee_id):
 def ajaxAddEmployee(request):
     if request.POST:
         if request.method == "POST":
-            form = AddEmployeeForm(request.POST)
+            form = EmployeeForm(request.POST)
             if form.is_valid():
                 employee = form.save(commit=False)
                 employee.user = request.user
@@ -305,7 +313,7 @@ def ajaxAddEmployee(request):
         context = {
             'path': reverse('workshop:ajaxAddEmployee'),
             'method': 'post',
-            'form': AddEmployeeForm().as_p(),
+            'form': EmployeeForm().as_p(),
         }
         return render(request, 'workshop/modal/addForm.html', context)
 
@@ -341,7 +349,7 @@ def invoiceDetail(request, invoice_id):
 def ajaxAddInvoice(request):
     if request.POST:
         if request.method == "POST":
-            form = AddInvoiceForm(request.POST)
+            form = InvoiceForm(request.POST)
             if form.is_valid():
                 invoice = form.save(commit=False)
                 invoice.user = request.user
@@ -353,6 +361,6 @@ def ajaxAddInvoice(request):
         context = {
             'path': reverse('workshop:ajaxAddInvoice'),
             'method': 'post',
-            'form': AddInvoiceForm(q={'user':request.user, 'customer':request.GET['customer']}).as_p(),
+            'form': InvoiceForm(q={'user':request.user, 'customer':request.GET['customer']}).as_p(),
         }
         return render(request, 'workshop/modal/addForm.html', context)

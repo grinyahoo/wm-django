@@ -11,7 +11,7 @@ YEARS = tuple((x,x) for x in range(datetime.date.today().year, 1950, -1))
 ## form to pick make -> return models by make
 ##
 
-class AddCustomerForm(forms.ModelForm):
+class CustomerForm(forms.ModelForm):
 
     class Meta:
         model = Customer
@@ -20,20 +20,20 @@ class AddCustomerForm(forms.ModelForm):
             'address': forms.TextInput()
         }
 
-class AddTaskForm(forms.ModelForm):
+class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
         fields = ['customer', 'vehicle', 'description', 'amount', 'employee']
 
     # def __init__(self, *args, **kwargs):
-    #     super(AddTaskForm, self).__init__(*args, **kwargs)
+    #     super(TaskForm, self).__init__(*args, **kwargs)
 
     def loadVehicles(self, user):
         self.fields['vehicle'].queryset = Vehicle.objects.filter(user=user)
         # self.fields['vehicle'].queryset = Vehicle.objects.all()
 
-class AddEmployeeForm(forms.ModelForm):
+class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
@@ -42,7 +42,7 @@ class AddEmployeeForm(forms.ModelForm):
             'notes': forms.Textarea()
         }
 
-class AddVehicleForm(forms.ModelForm):
+class VehicleForm(forms.ModelForm):
 
     class Meta:
         model = Vehicle
@@ -51,7 +51,7 @@ class AddVehicleForm(forms.ModelForm):
             'year': forms.Select(choices=YEARS),
         }
 
-class AddInvoiceForm(forms.ModelForm):
+class InvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
@@ -62,7 +62,7 @@ class AddInvoiceForm(forms.ModelForm):
         }
 
     def __init__(self, *args, q={}, **kwargs):
-        super(AddInvoiceForm, self).__init__(*args, **kwargs)
+        super(InvoiceForm, self).__init__(*args, **kwargs)
         if q:
             self.fields['tasks'].queryset = Task.objects.filter(user=q['user'], customer=q['customer'], invoiced=0)
             self.initial['customer'] = Customer.objects.get(user=q['user'], id=q['customer']).id
