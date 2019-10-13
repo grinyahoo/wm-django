@@ -37,7 +37,7 @@ def test(request):
                 md.save()
             except Exception as e:
                 pass
-        # time.sleep(5)
+        time.sleep(.1)
 
     return HttpResponse('Done')
 
