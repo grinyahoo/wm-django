@@ -1,100 +1,57 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-    {% if user.is_authenticated %}
-        <div class="container">
-          <div class="row mb-3">
-          <div class="col mx-1 p-0" style="height:auto">
-            <div class="lead text-center border-bottom ">Customers</div>
-            <div class="p-1 align-middle">
-              {% if customers %}
-              <div class="p-2">
-                {% for customer in customers %}
-                <p class="d-flex justify-content-between align-middle m-0">
-                  <a class="text-muted" href="{% url 'workshop:customerDetail' customer.id %}">{{ customer.name }}</a>
-                  <small><a class="add-invoice" data="{{ customer.id }}" href="">+ Invoice</a></small>
-                </p>
-                <ul class="list-group list-group-flush m-0">
-                  {% if customer.tasks_uninvoiced %}
-                  <li class="list-group-item align-middle p-1">Tasks not invoiced <span class="badge badge-primary">{{ customer.tasks_uninvoiced }}</span></li>
-                  {% endif %}
-                  {% if customer.invoices_unpaid %}
-                  <li class="list-group-item align-middle p-1">Invoices unpaid <span class="badge badge-primary">{{ customer.invoices_unpaid }}</span></li>
-                  {% endif %}
-                </ul>
-                {% endfor %}
-              </div>
-              {% endif %}
-            </div>
-          </div>
-          <div class="col mx-1 p-0" style="height:auto">
-            <div class="lead text-center border-bottom">Totals</div>
-            <div class="px-3 py-2">
-              {% for k,v in totals.items %}
-              <p class="lead m-0">{{ k.capitalize }} <span class="badge badge-primary float-right">{{ v }}</span></p>
+  {% if user.is_authenticated %}
+    <div class="container">
+      <div class="row mb-3">
+      {% include "workshop/dashboard/reports/sales_report.html" %}
+      </div>
+      <div class="row mb-3">
+        <div class="col mx-1 p-0" style="height:auto">
+          <div class="lead text-center border-bottom ">Customers</div>
+          <div class="p-1 align-middle">
+            {% if customers %}
+            <div class="p-2">
+              {% for customer in customers %}
+              <p class="d-flex justify-content-between align-middle m-0">
+                <a class="text-muted" href="{% url 'workshop:customerDetail' customer.id %}">{{ customer.name }}</a>
+                <small><a class="add-invoice" data="{{ customer.id }}" href="">+ Invoice</a></small>
+              </p>
+              <ul class="list-group list-group-flush m-0">
+                {% if customer.tasks_uninvoiced %}
+                <li class="list-group-item align-middle p-1">Tasks not invoiced <span class="badge badge-primary">{{ customer.tasks_uninvoiced }}</span></li>
+                {% endif %}
+                {% if customer.invoices_unpaid %}
+                <li class="list-group-item align-middle p-1">Invoices unpaid <span class="badge badge-primary">{{ customer.invoices_unpaid }}</span></li>
+                {% endif %}
+              </ul>
               {% endfor %}
-
             </div>
+            {% endif %}
           </div>
         </div>
-
-        <div class="row mb-3">
-          <div class="container">
-            <div class="lead font-weight-bold">Recent tasks:</div>
-            <div class="">
-              {% if tasks %}
-              <ul class="list-group task-list">
-                {% for task in tasks %}
-                <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
-                  <div class="row mb-2">
-                    <div class="col text-left">
-                      <h5>{{ task.vehicle }}</h5>
-                    </div>
-                    <div class="col text-center">
-                        {{ task.customer }}
-                    </div>
-                    <div class="col text-center">
-                        {{ task.employee }}
-                    </div>
-                    <div class="col text-right">
-                      <i class="fas fa-clock"></i> {{ task.date_filed|date:"d M Y" }}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-10">
-                        <p class="lead">{{ task.description }}</p>
-                    </div>
-                    <div class="col-2 text-right">
-                        <b>Total: ${{ task.amount }}</b>
-                    </div>
-                  </div>
-                </li>
-                {% endfor %}
-              </ul>
-              {% else %}
-              <p>You have no tasks.</p>
-              {% endif %}
-            </div>
-          </div>
-          <div class="container mb-3">
-            <div class="lead font-weight-bold">
-              Recent invoices:
-            </div>
-            <div class="">
-              {% if invoices %}
-              <ul class="list-group list-group-flush">
-                {% for invoice in invoices %}
-                <li class="list-group-item">{{ invoice.date }}: Invoice #{{ invoice.id }} to {{ invoice.customer }}</li>
-                {% endfor %}
-              </ul>
-              {% else %}
-              <p>You have no invoices.</p>
-              {% endif %}
-            </div>
+        <div class="col mx-1 p-0" style="height:auto">
+          <div class="lead text-center border-bottom">Totals</div>
+          <div class="px-3 py-2">
+            {% for k,v in totals.items %}
+            <p class="lead m-0">{{ k.capitalize }} <span class="badge badge-primary float-right">{{ v }}</span></p>
+            {% endfor %}
           </div>
         </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="lead text-center p-1 mb-2 border-bottom">Recent tasks:</div>
+          
+          {% include "workshop/dashboard/lists/tasks.html" %}
         </div>
-
-    {% else %}
-    <h1>You are not logged in</h1>
-    {% endif %}
+        <div class="col mb-3">
+          <div class="lead text-center p-1 mb-2 border-bottom">Recent invoices</div>
+          
+          {% include "workshop/dashboard/lists/invoices.html" %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+  <h1>You are not logged in</h1>
+  {% endif %}
 {% endblock %}
