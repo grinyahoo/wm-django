@@ -5,7 +5,7 @@ from .models import Employee, Make, Model, Customer, Task, Invoice, Vehicle
 class EmployeeAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        ('Employee', {'fields': ['name', 'user']}),
+        ('Employee', {'fields': ['name', 'phone', 'cost_per_hour', 'notes', 'user']}),
     ]
 
 admin.site.register(Employee, EmployeeAdmin)
