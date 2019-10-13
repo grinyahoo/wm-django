@@ -1,37 +1,35 @@
 {% if invoices %}
+<h6>Invoices:</h6>
 <ul class="list-group invoice-list">
   {% for invoice in invoices %}
   <li class="list-group-item invoice-list-item bg-light mb-2 py-1">
     <div class="row">
-      <div class="col-1 text-left">
-        #{{ invoice.id }}:
+      <div class="col">
+        <a class="text-primary" href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice.date }}</a>
       </div>
-      <div class="col-11 text-right">
-        <a class="text-muted" href="{% url 'workshop:invoiceDetail' invoice.id %}">{{ invoice.date }}</a>
-      </div>
+      <div class="col-4 text-right">Due: {{ invoice.date_due|date:"d M Y" }}</div>
     </div>
     <div class="row">
       <div class="col">
-        <p>Due date: {{ invoice.date_due }}</p>
-        <p>Paid: {{ invoice.date_paid }}</p>
-      </div>
-      <div class="col text-right">
-        <p>Amount: {{ invoice.amount_total }}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
+        {% if invoice.tasks %}
         <p class="" data-toggle="collapse" data-target="#collapseTasks{{ invoice.id }}" aria-expanded="false" aria-controls="collapseTasks{{ invoice.id }}"><i class="fas fa-angle-down mr-2"></i>Tasks</p>
         <p class="collapse" id="collapseTasks{{ invoice.id }}">
           {{ invoice.tasks }}
         </p>
+        {% else %}
+        {% endif %}
       </div>
-
+      <div class="col text-right">
+        <p>Amount: {{ invoice.amount_total }}</p>
+      </div>
     </div>
   </li>
   {% endfor %}
 </ul>
 
 {% else %}
-<p>No invoices.</p>
+<div class="col text-center bg-light text-secondary p-3">
+  <h2>No invoices</h2>
+  <p><a href="/"><i class="far fa-plus-square fa-lg mx-2"></i>add invoice</a></p>
+</div>
 {% endif %}

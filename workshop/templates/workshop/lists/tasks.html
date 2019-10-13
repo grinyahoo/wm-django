@@ -1,4 +1,5 @@
 {% if tasks %}
+<h6>Tasks:</h6>
 <ul class="list-group task-list">
   {% for task in tasks %}
   <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
@@ -22,5 +23,8 @@
   {% endfor %}
 </ul>
 {% else %}
-<p>No services reported yet.</p>
+<div class="col text-center bg-light text-secondary p-5">
+  <h2>No tasks</h2>
+  <p><a href="/"><i class="far fa-plus-square fa-lg mx-2"></i>add task</a></p>
+</div>
 {% endif %}
