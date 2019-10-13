@@ -2,15 +2,9 @@
 <ul class="list-group task-list">
   {% for task in tasks %}
   <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
-    <div class="row mb-2">
+    <div class="row d-flex">
       <div class="col text-left">
-        <h5>{{ task.vehicle }}</h5>
-      </div>
-      <div class="col text-center">
-          {{ task.customer }}
-      </div>
-      <div class="col text-center">
-          {{ task.employee }}
+        <p>{{ task.vehicle }}</p>
       </div>
       <div class="col text-right">
         <i class="fas fa-clock"></i> {{ task.date_filed|date:"d M Y" }}
@@ -18,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col-9">
-          <p class="lead">{{ task.description }}</p>
+        {{ task.description }}
       </div>
       <div class="col-3 text-right">
           <b>${{ task.amount }}</b>
