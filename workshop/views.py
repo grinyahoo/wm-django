@@ -266,13 +266,28 @@ def employeeList(request):
 @login_required
 def employeeDetail(request, employee_id):
 
-    employee = get_object_or_404(Employee, pk=employee_id, user=request.user)
-    form = AddEmployeeForm(instance=employee)
+    messages = {}
+
+    if request.POST:
+        if request.method == "POST":
+            form = AddEmployeeForm(request.POST)
+            if form.is_valid():
+                employee = form.save(commit=False)
+                employee.user = request.user
+                employee.save()
+                messages['success'] = "Employee data saved successfuly."
+            else:
+                messages['warning'] = "Form is not vaild. Employee data was not saved."
+    else:
+        employee = get_object_or_404(Employee, pk=employee_id, user=request.user)
+        form = AddEmployeeForm(instance=employee)
+
     context = {
         'title': 'Employee %s' % employee.name,
         'employee': employee,
         'view_name': 'employees',
-        'form': form
+        'form': form,
+        'messages': messages
     }
     return render(request, 'workshop/employeeDetail.html', context)
 
