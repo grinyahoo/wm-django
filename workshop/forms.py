@@ -37,7 +37,10 @@ class AddEmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ['name']
+        fields = ['name', 'cost_per_hour', 'phone', 'notes']
+        widgets = {
+            'notes': forms.Textarea()
+        }
 
 class AddVehicleForm(forms.ModelForm):
 
