@@ -266,12 +266,13 @@ def employeeList(request):
 @login_required
 def employeeDetail(request, employee_id):
 
-
     employee = get_object_or_404(Employee, pk=employee_id, user=request.user)
+    form = AddEmployeeForm(instance=employee)
     context = {
         'title': 'Employee %s' % employee.name,
         'employee': employee,
         'view_name': 'employees',
+        'form': form
     }
     return render(request, 'workshop/employeeDetail.html', context)
 
