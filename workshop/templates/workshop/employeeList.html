@@ -1,10 +1,30 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-      {% if employees %}
-      {% for employee in employees %}
-        <p><a href="{% url 'workshop:employeeDetail' employee.id %}">{{ employee }}</a></p>
-      {% endfor %}
-      {% else %}
-      <p>No employees</p>
-      {% endif %}
+  <div class="container h-100">
+    <div class="row">
+      <div class="col">
+        <div class="container border rounded">
+          <div class="row bg-dark text-white p-2">
+            <div class="col">
+                <h4>Employees</h4>
+            </div>
+          </div>
+          <div class="row">
+            {% if employees %}
+            <div class="col">
+              {% for employee in employees %}
+              <p><a href="{% url 'workshop:employeeDetail' employee.id %}">{{ employee }}</a></p>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="col text-center bg-light text-secondary p-5">
+              <h2>No employees</h2>
+              <p><a href="/">Add employee</a></p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
