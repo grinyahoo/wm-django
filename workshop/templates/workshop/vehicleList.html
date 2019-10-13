@@ -28,7 +28,7 @@
                     <td>{{ vehicle.plate_number }}</td>
                     <td>{{ vehicle.make }}</td>
                     <td>{{ vehicle.model }}</td>
-                    <td>{{ vehicle.customer }}</td>
+                    <td><a href="{% url "workshop:customerDetail" vehicle.customer.id %}">{{ vehicle.customer }}</a></td>
                     <td class="text-right">
                       <a href="{% url 'workshop:vehicleDetail' vehicle.id %}"><i class="far fa-edit"></i></a>
                     </td>
