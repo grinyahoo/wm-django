@@ -1,16 +1,48 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-      {% if customers %}
-      <h3>Your customers: <small><a href="">+ Add</a></small></h3>
-      <ul class="list-group list-group-flush">
-        {% for customer in customers %}
-        <li class="list-group-item">
-          <a href="{% url 'workshop:customerDetail' customer.id %}">{{ customer }}</a>
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p class="lead">You didn't add customers yet.</p>
-      <p><a class="nav-link add-customer" href="#"><i class="fas fa-plus fa-sm"></i><span class="ml-2">Customer</span></a></p>
-      {% endif %}
+<div class="container h-100">
+  <div class="row">
+    <div class="col">
+      <div class="container">
+        <div class="row bg-dark text-white">
+          <div class="col">
+              <h4>Customers</h4>
+          </div>
+        </div>
+        <div class="row">
+          {% if customers %}
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Phone</th>
+                  <th scope="col">City</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for customer in customers %}
+                  <tr>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.city }}</td>
+                    <td class="text-right">
+                      <a href="{% url "workshop:customerDetail" customer.id %}"><i class="far fa-edit"></i></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="col text-center bg-light text-secondary p-5">
+            <h2>No customers</h2>
+            <p><a href="/"><i class="far fa-edit fa-lg mx-2"></i>add customer</a></p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
