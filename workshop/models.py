@@ -49,8 +49,12 @@ class Vehicle(models.Model):
     make = models.ForeignKey(Make, on_delete=models.PROTECT, default=1)
     model = models.ForeignKey(Model, on_delete=models.PROTECT)
     plate_number = models.CharField(max_length=10, default='n/a')
+    plate_state = models.CharField(max_length=3, default='n/a')
     color = models.CharField(max_length=50, default='n/a')
-    vim = models.CharField(max_length=10, default='n/a')
+    vin = models.CharField(max_length=17, default='n/a')
+    fleet_id = models.CharField(max_length=10, default='n/a')
+    odometer = models.IntegerField(default=0)
+    prod_date = models.CharField(max_length=7, default='n/a')
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=2)
 
     def __str__(self):
