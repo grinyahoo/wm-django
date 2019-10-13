@@ -12,9 +12,27 @@
           <div class="row">
             {% if employees %}
             <div class="col">
-              {% for employee in employees %}
-              <p><a href="{% url 'workshop:employeeDetail' employee.id %}">{{ employee }}</a></p>
-              {% endfor %}
+              
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                      <td>{{ employee.name }}</td>
+                      <td>{{ employee.phone }}</td>
+                      <td class="text-right">
+                        <a href="{% url 'workshop:employeeDetail' employee.id %}"><i class="far fa-edit"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
             </div>
             {% else %}
             <div class="col text-center bg-light text-secondary p-5">
