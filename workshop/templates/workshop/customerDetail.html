@@ -1,29 +1,43 @@
 {% extends 'workshop/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container">
-  <h2>{{ customer }}</h2>
   <div class="row">
     <div class="col">
-      <p class="lead"><h4>Customer info:</h4></p>
-      <p>Address: {{ customer.address }}, {{ customer.city }}, {{ customer.state }}, {{ customer.zip }}</p>
-      <p>Phone: {{ customer.phone }}</p>
-    </div>
-    <div class="col">
-      <p class="lead"><h4>Vehiles:</h4></p>
-      {% include 'workshop/lists/vehicles.html' %}
+      <h3>{{ customer.name }}</h3>  
     </div>
   </div>
+  <hr />
   <div class="row">
-    <div class="col">
-      <p class="lead"><h4>Services:</h4></p>
-      {% include 'workshop/lists/tasks.html' %}
+    <div class="col-3 bg-light">
+      <h5>Details:</h5>
+      <form action="{% url 'workshop:customerDetail' customer.id %}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-outline-danger">Delete</button>
+      </form>
     </div>
-
     <div class="col">
-      <p class="lead"><h4>Invoices:</h4></p>
-      {% include 'workshop/lists/invoices.html' %}
+      <div class="row">
+        <div class="col">
+        <h6 class="">Vehicles:</h6>
+        {% include 'workshop/lists/vehicles.html' %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h6>Jobs:</h6>
+          {% include 'workshop/lists/tasks.html' %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h6>Invoices:</h6>
+          {% include 'workshop/lists/invoices.html' %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
 {% endblock %}
