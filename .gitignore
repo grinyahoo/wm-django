@@ -58,6 +58,7 @@ db.sqlite3
 GarageManager/
 workshop/__pycache__/
 GarageManager/__pycache__/
+workshop/migrations/
 
 # Flask stuff:
 instance/
