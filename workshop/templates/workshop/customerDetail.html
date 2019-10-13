@@ -10,7 +10,6 @@
   <hr />
   <div class="row">
     <div class="col-3 bg-light">
-      <h5>Details:</h5>
       <form action="{% url 'workshop:customerDetail' customer.id %}" method="POST">
         {% csrf_token %}
         {{ form|crispy }}
@@ -21,19 +20,16 @@
     <div class="col">
       <div class="row">
         <div class="col">
-        <h6 class="">Vehicles:</h6>
         {% include 'workshop/lists/vehicles.html' %}
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <h6>Jobs:</h6>
           {% include 'workshop/lists/tasks.html' %}
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <h6>Invoices:</h6>
           {% include 'workshop/lists/invoices.html' %}
         </div>
       </div>
