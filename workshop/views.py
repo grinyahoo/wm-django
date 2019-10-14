@@ -1,11 +1,12 @@
 import datetime, json, time
+from datetime import date, timedelta
 from urllib.request import urlopen
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.views import generic
 from django.urls import reverse
 from django.template import loader
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Sum
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
@@ -89,15 +90,15 @@ def index(request):
 @login_required
 def dashboard(request):
 
-    tasks = Task.objects.filter(user=request.user).order_by('-date_filed')[:20]
+    tasks = Task.objects.filter(user=request.user).order_by('-date_filed')
     customers = Customer.objects.filter(
-                                    user=request.user,
-                                    task__invoiced=0
-                                    ).annotate(
-                                    tasks_total=Count('task')
-                                    ).annotate(
-                                    tasks_uninvoiced=Count('task', filter=Q(task__invoiced=0))
-                                    )
+        user=request.user,
+        task__invoiced=0
+        ).annotate(
+        tasks_total=Count('task')
+        ).annotate(
+        tasks_uninvoiced=Count('task', filter=Q(task__invoiced=0))
+        )
     invoices = Invoice.objects.filter(user=request.user).order_by('-date')[:20]
     totals = {
         'customers': Customer.objects.filter(user=request.user).count(),
@@ -105,14 +106,35 @@ def dashboard(request):
         'invoices': Invoice.objects.filter(user=request.user).count(),
         'tasks': Task.objects.filter(user=request.user).count()
     }
+
+    today = date.today()
+    week = datetime.datetime.strptime(
+        "{}-W{}".format(today.year, today.isocalendar()[1]) + '-1', 
+        "%Y-W%W-%w"
+        ) + datetime.timedelta(days=-7)
     context = {
         'title': 'Dashboard - %s.' % request.user.username,
-        'tasks': tasks,
         'invoices': invoices,
         'view_name': 'dashboard',
         'customers': customers,
         'totals': totals,
+        'flow': {
+            'day': tasks.filter(
+                date_filed__year=today.year,
+                date_filed__month=today.month,
+                date_filed__day=today.day,
+                ).aggregate(Sum('amount')),
+            'week': tasks.filter(
+                date_filed__gte=(week)
+                ).aggregate(Sum('amount')),
+            'month': tasks.filter(
+                date_filed__year=today.year,
+                date_filed__month=today.month
+                ).aggregate(Sum('amount')),
+        },
+        'tasks': tasks,
     }
+    
     return render(request, 'workshop/index.html', context)
 
 @login_required
