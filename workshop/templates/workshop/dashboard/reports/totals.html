@@ -1,0 +1,8 @@
+<div class="col-xs-12 col-sm-6 col-md-4 mx-1 p-0">
+    <div class="lead text-center border-bottom">Totals</div>
+    <div class="px-3 py-2">
+    {% for k,v in totals.items %}
+    <p class="lead m-0">{{ k.capitalize }} <span class="badge badge-primary float-right">{{ v }}</span></p>
+    {% endfor %}
+    </div>
+</div>

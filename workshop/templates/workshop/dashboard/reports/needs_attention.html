@@ -1,0 +1,23 @@
+{% if customers %}
+    <div class="col-4 mx-1 p-0">
+    <div class="lead text-center border-bottom ">Needs attention</div>
+    <div class="p-1 align-middle">
+        <div class="p-2">
+            {% for customer in customers %}
+            <p class="d-flex justify-content-between align-middle m-0">
+            <a class="text-muted" href="{% url 'workshop:customerDetail' customer.id %}">{{ customer.name }}</a>
+            <small><a class="add-invoice" data="{{ customer.id }}" href="">+ Invoice</a></small>
+            </p>
+            <ul class="list-group list-group-flush m-0">
+            {% if customer.tasks_uninvoiced %}
+            <li class="list-group-item align-middle p-1">Tasks not invoiced <span class="badge badge-primary">{{ customer.tasks_uninvoiced }}</span></li>
+            {% endif %}
+            {% if customer.invoices_unpaid %}
+            <li class="list-group-item align-middle p-1">Invoices unpaid <span class="badge badge-primary">{{ customer.invoices_unpaid }}</span></li>
+            {% endif %}
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}

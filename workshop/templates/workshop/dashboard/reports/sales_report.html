@@ -1,20 +1,26 @@
 <div class="container">
-    <div class="row text-center">
-        <div class="col p-0 border mx-1">
+    <div class="lead text-center border-bottom">Flow</div>
+    <div class="row text-center px-3 py-2">
+        <div class="col p-0 bg-light mx-1">
             <div class="lead p-1">Today sales</div>
             <div class="p-2">
-            <i class="fas fa-dollar-sign fa-lg"></i> 999.99
+            <i class="fas fa-dollar-sign fa-lg"></i> 
+            {{ flow.day.amount__sum|floatformat:2 }}
             </div>
         </div>
-        <div class="col p-0 border mx-1">
+        <div class="col p-0 bg-light mx-1">
             <div class="lead p-1">Week sales</div>
             <div class="p-2">
-            <i class="fas fa-dollar-sign fa-lg"></i> 999.99
+            <i class="fas fa-dollar-sign fa-lg"></i> 
+            {{ flow.week.amount__sum }}
             </div>
-        </div><div class="col p-0 border mx-1">
+        </div><div class="col p-0 bg-light mx-1">
             <div class="lead p-1">Month sales</div>
             <div class="p-2">
-            <i class="fas fa-dollar-sign fa-lg"></i> 999.99
+            <i class="fas fa-dollar-sign fa-lg"></i> 
+            {{ flow.month.amount__sum|floatformat:2 }}
+            {{ flow.month.sum|floatformat:2 }}
+            
             </div>
         </div>
     </div>
