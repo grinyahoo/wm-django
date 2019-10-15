@@ -5,22 +5,32 @@
             <div class="lead p-1">Today sales</div>
             <div class="p-2">
             <i class="fas fa-dollar-sign fa-lg"></i> 
+            {% if flow.day.amount__sum %}
             {{ flow.day.amount__sum|floatformat:2 }}
+            {% else %}
+            {{ 0|floatformat:2 }}
+            {% endif %}
             </div>
         </div>
         <div class="col p-0 bg-light mx-1">
             <div class="lead p-1">Week sales</div>
             <div class="p-2">
             <i class="fas fa-dollar-sign fa-lg"></i> 
-            {{ flow.week.amount__sum }}
+            {% if flow.week.amount__sum %}
+            {{ flow.week.amount__sum|floatformat:2 }}
+            {% else %}
+            {{ 0|floatformat:2 }}
+            {% endif %}
             </div>
         </div><div class="col p-0 bg-light mx-1">
             <div class="lead p-1">Month sales</div>
             <div class="p-2">
             <i class="fas fa-dollar-sign fa-lg"></i> 
+            {% if flow.month.amount__sum %}
             {{ flow.month.amount__sum|floatformat:2 }}
-            {{ flow.month.sum|floatformat:2 }}
-            
+            {% else %}
+            {{ 0|floatformat:2 }}
+            {% endif %}
             </div>
         </div>
     </div>
