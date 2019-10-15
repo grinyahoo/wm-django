@@ -15,7 +15,7 @@ var ajaxModalGetForm = function(path, title, m=modal, query) {
     $(m.window).modal('show');
   })
   .fail(()=>{
-    $(m.message).addClass('alert-warning').html('You are not logged in').fadeIn(500);
+    $(m.message).addClass('alert-warning').html('Something went wrong.').fadeIn(500);
     $(m.window).modal('show');
     setTimeout(()=>{
       $(m.window).modal('hide');
