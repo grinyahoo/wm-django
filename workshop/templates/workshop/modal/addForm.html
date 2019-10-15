@@ -1,4 +1,5 @@
-<form id="modalForm" class="form " action="{{ path }}" method="{{ form_method }}" style="height: auto;">
+{% load crispy_forms_tags %}
+<form id="modalForm" action="{{ path }}" method="{{ form_method }}" style="height: auto;">
   {% csrf_token %}
-  {{ form }}
+  {{ form|crispy }}
 </form>
