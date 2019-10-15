@@ -2,6 +2,7 @@
 <ul class="list-group task-list">
   {% for task in tasks %}
   <li class="list-group-item bg-light task-list-item mb-2 py-1 px-3">
+  <a href="{% url "workshop:taskDetail" task.id %}">
     <div class="row d-flex">
       <div class="col text-left">
         <p>{{ task.vehicle }}</p>
@@ -10,6 +11,7 @@
         <i class="fas fa-clock"></i> {{ task.date_filed|date:"d M Y" }}
       </div>
     </div>
+  </a>
     <div class="row">
       <div class="col-9">
         {{ task.description }}
