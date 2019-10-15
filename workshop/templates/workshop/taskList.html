@@ -1,23 +1,28 @@
 {% extends 'workshop/base.html' %}
 {% block content %}
-    {% if user.is_authenticated %}
-
-    <div class="container">
-      <div class="d-block d-md-none">
-        <a class="nav-link add-task" href="#"><i class="fas fa-plus fa-sm"></i> Add new task</a>
-      </div>
-      <div class="row">
-        {% if tasks %}
-        <h2> Tasks: </h2>
-        <div class="container">
-          {% include 'workshop/lists/tasks.html' %}
+<div class="container h-100">
+  <div class="row">
+    <div class="col">
+      <div class="container">
+        <div class="row p-2">
+          <div class="col">
+              <h4>Tasks</h4>
+          </div>
         </div>
-        {% else %}
-          <p>You have no tasks.</p>
-        {% endif %}
+        <div class="row">
+          <div class="col">
+          {% if tasks %}          
+          {% include 'workshop/lists/tasks_thick.html' %}
+          {% else %}
+          <div class="col text-center bg-light text-secondary p-5">
+            <h2>No tasks</h2>
+            <p><a href="/"><i class="far fa-edit fa-lg mx-2"></i>add task</a></p>
+          </div>
+          {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-    {% else %}
-    <h1>You are not logged in</h1>
-    {% endif %}
+  </div>
+</div>
 {% endblock %}
