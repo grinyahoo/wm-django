@@ -3,18 +3,21 @@ from datetime import date, timedelta
 from urllib.request import urlopen
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpRequest
-from django.views import generic
+from django.views.generic import ListView
 from django.urls import reverse
 from django.template import loader
 from django.db.models import Q, Count, Sum
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import auth
 from .models import Employee, Make, Model, Customer, Vehicle, Task, Invoice
 from .forms import CustomerForm, TaskForm, EmployeeForm, VehicleForm, InvoiceForm
 
+
+# TODO: generic views, ajax mixin.
 # Test view:
 def test(request):
 
@@ -125,7 +128,7 @@ def dashboard(request):
                 date_filed__day=today.day,
                 ).aggregate(Sum('amount')),
             'week': tasks.filter(
-                date_filed__gte=(week)
+                date_filed__gte=week
                 ).aggregate(Sum('amount')),
             'month': tasks.filter(
                 date_filed__year=today.year,
@@ -134,21 +137,25 @@ def dashboard(request):
         },
         'tasks': tasks,
     }
-    
     return render(request, 'workshop/index.html', context)
 
-@login_required
-def taskList(request):
+@method_decorator(login_required, name="dispatch")
+class TaskListView(ListView):
+    model = Task
+    context_object_name = 'tasks'
+    template_name = "workshop/taskList.html"
+    paginate_by = 50
 
-    tasks_all = Task.objects.filter(user=request.user).order_by('-date_filed')
-    context = {
-        'title': 'Tasks - %s.' % request.user.username,
-        'tasks': tasks_all,
-        'view_name': 'tasks',
-    }
-    return render(request, 'workshop/taskList.html', context)
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user
+            ).order_by('-date_filed')
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'WM - list of tasks.'
+        # context["view_name"] = "dashboard"
+        return context
+    
 @login_required
 def taskDetail(request, task_id):
 
@@ -174,11 +181,14 @@ def ajaxAddTask(request):
             return JsonResponse({'message':'Accepted'})
     else:
         if request.user.is_authenticated:
-            form = TaskForm().loadVehicles(request.user)
+            vehicles = Vehicle.objects.filter(
+                user=request.user
+            )
+            # form = TaskForm().loadVehicles(request.user)
             context = {
                 'path': reverse('workshop:ajaxAddTask'),
                 'method': 'post',
-                'form': TaskForm().as_p(),
+                'form': TaskForm(),
             }
             return render(request, 'workshop/modal/addForm.html', context)
         else:
@@ -237,7 +247,7 @@ def ajaxAddCustomer(request):
         context = {
             'path': reverse('workshop:ajaxAddCustomer'),
             'method': 'post',
-            'form': CustomerForm().as_p(),
+            'form': CustomerForm(),
         }
         return render(request, 'workshop/modal/addForm.html', context)
 
@@ -289,7 +299,7 @@ def ajaxAddVehicle(request):
         context = {
             'path': reverse('workshop:ajaxAddVehicle'),
             'method': 'post',
-            'form': VehicleForm().as_p(),
+            'form': VehicleForm(),
         }
         return render(request, 'workshop/modal/addForm.html', context)
 
@@ -344,9 +354,9 @@ def ajaxAddEmployee(request):
         context = {
             'path': reverse('workshop:ajaxAddEmployee'),
             'method': 'post',
-            'form': EmployeeForm().as_p(),
+            'form': EmployeeForm(),
         }
-        return render(request, 'workshop/modal/addForm.html', context)
+        return render(request, 'workshop/forms/employee.html', context)
 
 @login_required
 def invoiceList(request):
@@ -384,14 +394,21 @@ def ajaxAddInvoice(request):
             if form.is_valid():
                 invoice = form.save(commit=False)
                 invoice.user = request.user
+                tasks = form.cleaned_data['tasks']
+                invoice.amount_total = tasks.aggregate(Sum('amount'))['amount__sum']
                 invoice.save()
-                return JsonResponse({'message':'Accepted'})
+                return JsonResponse({'message': ""})
             else:
-                return JsonResponse({'message':'Form is not valid.'})
+                return JsonResponse({'message': form.errors })
     else:
-        context = {
-            'path': reverse('workshop:ajaxAddInvoice'),
-            'method': 'post',
-            'form': InvoiceForm(q={'user':request.user, 'customer':request.GET['customer']}).as_p(),
-        }
-        return render(request, 'workshop/modal/addForm.html', context)
+        if request.GET['customer']:
+            context = {
+                'path': reverse('workshop:ajaxAddInvoice'),
+                'method': 'post',
+                'form': InvoiceForm(q={'user':request.user, 'customer':request.GET['customer']}),
+                # 'form': InvoiceForm(),
+
+            }
+            return render(request, 'workshop/modal/addForm.html', context)
+        else:
+            return JsonResponse({'message': 'no customer' })
