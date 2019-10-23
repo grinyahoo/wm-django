@@ -1,15 +1,12 @@
 import datetime
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Customer, Employee, Vehicle, Task, Invoice
-# from django.utils import timezone
+# TODO: make timezone aware
 
 YEARS = tuple((x,x) for x in range(datetime.date.today().year, 1950, -1))
-
-## Need
-## form to pick customers
-## form to pick make -> return models by make
-##
 
 class CustomerForm(forms.ModelForm):
 
@@ -26,21 +23,34 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['customer', 'vehicle', 'description', 'amount', 'employee']
 
-    # def __init__(self, *args, **kwargs):
-    #     super(TaskForm, self).__init__(*args, **kwargs)
-
-    def loadVehicles(self, user):
-        self.fields['vehicle'].queryset = Vehicle.objects.filter(user=user)
-        # self.fields['vehicle'].queryset = Vehicle.objects.all()
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
 
 class EmployeeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ['name', 'cost_per_hour', 'phone', 'notes']
+        exclude = ['user']
         widgets = {
             'notes': forms.Textarea()
         }
+    
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Add employee',
+                'name', 
+                'cost_per_hour', 
+                'phone', 
+                'notes'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit', css_class="button white"),
+
+            )
+        )
+        super(EmployeeForm, self).__init__(*args, **kwargs)
 
 class VehicleForm(forms.ModelForm):
 
