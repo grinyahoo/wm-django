@@ -3,16 +3,20 @@ from datetime import date, timedelta
 from urllib.request import urlopen
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpRequest
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse
 from django.template import loader
 from django.db.models import Q, Count, Sum
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
+from django.contrib import auth
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import auth
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 from .models import Employee, Make, Model, Customer, Vehicle, Task, Invoice
 from .forms import CustomerForm, TaskForm, EmployeeForm, VehicleForm, InvoiceForm
 
@@ -139,8 +143,8 @@ def dashboard(request):
     }
     return render(request, 'workshop/index.html', context)
 
-@method_decorator(login_required, name="dispatch")
-class TaskListView(ListView):
+
+class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'tasks'
     template_name = "workshop/taskList.html"
@@ -155,7 +159,26 @@ class TaskListView(ListView):
         context["title"] = 'WM - list of tasks.'
         # context["view_name"] = "dashboard"
         return context
+
+  
+class TaskCreateView(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = "workshop/taskCreate.html"
+
+
+class TaskDetailView(LoginRequiredMixin, DetailView):
+    model = Task
+    context_object_name = 'task'
+    template_name = "workshop/taskDetail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context[""] = 
+        return context
     
+
+
 @login_required
 def taskDetail(request, task_id):
 
