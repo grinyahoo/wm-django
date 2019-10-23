@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from urllib.request import urlopen
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse, HttpRequest
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.urls import reverse
 from django.template import loader
 from django.db.models import Q, Count, Sum
@@ -16,9 +16,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-from .models import Employee, Make, Model, Customer, Vehicle, Task, Invoice
 from .forms import CustomerForm, TaskForm, EmployeeForm, VehicleForm, InvoiceForm
+from .mixins import AjaxFormMixin
+from .models import Employee, Make, Model, Customer, Vehicle, Task, Invoice
+
 
 
 # TODO: generic views, ajax mixin.
@@ -177,7 +178,11 @@ class TaskDetailView(LoginRequiredMixin, DetailView):
         # context[""] = 
         return context
     
-
+class TaskFormView(AjaxFormMixin, FormView):
+    form_class = TaskForm
+    template_name = "workshop/forms/ajax.html"
+    # context_object_name = "form"
+    success_url = '/tasks'
 
 @login_required
 def taskDetail(request, task_id):
