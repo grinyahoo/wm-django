@@ -9,8 +9,9 @@ urlpatterns = [
     path('logout', views.user_logout_view, name='logout'),
     path('dashboard', views.dashboard, name = 'dashboard'),
     #
-    path('tasks', views.taskList, name='taskList'),
-    path('tasks/<int:task_id>', views.taskDetail, name='taskDetail'),
+    path('tasks', views.TaskListView.as_view(), name='taskList'),
+    path('tasks/<int:pk>', views.TaskDetailView.as_view(), name='taskDetail'),
+    path('tasks/create', views.TaskCreateView.as_view(), name='taskCreate'),
     path('ajax/addTask', views.ajaxAddTask, name='ajaxAddTask'),
     #
     path('vehicles/', views.vehicleList, name='vehicleList'),
