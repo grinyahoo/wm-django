@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 import datetime
 
 # helper functions
@@ -69,13 +70,16 @@ class Task(models.Model):
     description = models.TextField()
     amount = models.FloatField()
     employee = models.ForeignKey(Employee, on_delete=models.PROTECT)
-    date_filed = models.DateTimeField('date filed')
+    date_filed = models.DateTimeField('date filed', default=datetime.datetime.now())
     date_paid = models.DateTimeField('date paid', default=now_plus_days(360))
     invoiced = models.BooleanField(default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=2)
 
     def __str__(self):
         return "%s %s" % (self.vehicle, self.description)
+
+    def get_absolute_url(self):
+        return reverse("taskDetail", kwargs={"pk": self.pk})
 
 class Invoice(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
