@@ -23,8 +23,18 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['customer', 'vehicle', 'description', 'amount', 'employee']
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, q={}, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
+        self.fields['vehicle'] = forms.ModelChoiceField(
+            queryset=Vehicle.objects.filter(user=q['user'])
+        ) 
+        self.fields['customer'] = forms.ModelChoiceField(
+            queryset=Customer.objects.filter(user=q['user'])
+        )
+        self.fields['employee'] = forms.ModelChoiceField(
+            queryset=Employee.objects.filter(user=q['user'])
+        )
+        
 
 class EmployeeForm(forms.ModelForm):
 
